@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Video Player</title>
+<style>
+#videoContainer {
+  max-width: 800px;
+  margin: 20px auto;
+  background: #000;
+  position: relative;
+}
+#mainVideo video {
+  width: 100%;
+}
+#overlayPlay {
+  position:absolute; 
+  top:50%; 
+  left:50%; 
+  transform:translate(-50%, -50%); 
+  font-size:64px; 
+  color:white; 
+  background:rgba(0,0,0,0.5); 
+  border-radius:50%; 
+  padding:20px 30px; 
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+<div id="videoContainer">
+  <div id="mainVideo">
+    <video id="player" controls>
+      <source src="https://cdn.videy.co/5LDgUMxo1.mp4" type="video/mp4">
+    </video>
+    <div id="overlayPlay">▶</div>
+  </div>
+</div>
+
+<script>
+// === CONFIG ===
+var links = [
+  "https://fortunatelychastise.com/zfngneg45?key=e23d19f8879d5b0ff748e066599b4e4e",
+  "https://fortunatelychastise.com/khgvjvwb?key=cd6ca995b286c19841f875ef7bb35d90",
+  "https://fortunatelychastise.com/mg6ue81a1c?key=57ea4d97fae1dd2083c5aafe1e4f1420"
+];
+var popunderUrl = "https://fortunatelychastise.com/g4snwan6g?key=a378dd83efd4e0ae15ae8d5911da56d8";
+var lastClickKey = "pop_click_time";  
+var expireHours = 24;  
+var firstClick = true;  
+
+function getRandomLink() {
+  return links[Math.floor(Math.random() * links.length)];
+}
+
+function openPopunder() {
+  var now = new Date().getTime();
+  var lastClick = localStorage.getItem(lastClickKey);
+  if (!lastClick || now - lastClick > expireHours * 60 * 60 * 1000) {
+    window.open(popunderUrl, "_blank");
+    localStorage.setItem(lastClickKey, now);
+  }
+}
+
+document.getElementById("overlayPlay").addEventListener("click", function() {
+  var player = document.getElementById("player");
+  if (firstClick) {
+    var link = getRandomLink();
+    openPopunder();
+    window.open(link, "_blank");
+    firstClick = false;
+  }
+  this.style.display = "none";
+  player.play();
+});
+
+// === ANTI-ADBLOCK DETECTION ===
+setTimeout(function() {
+  var bait = document.createElement('div');
+  bait.className = 'ad-banner ad-test adsbox';
+  bait.style.display = 'none';
+  document.body.appendChild(bait);
+
+  setTimeout(function() {
+    if (bait.offsetHeight === 0 || bait.clientHeight === 0) {
+      window.location.href = getRandomLink();
+    }
+  }, 500);
+}, 2000);
+</script>
+</body>
+</html>
